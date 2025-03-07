@@ -60,8 +60,10 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs .androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(project(":utilities"))
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -75,9 +77,20 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.gson)      // Gson converter
     implementation(libs.retrofit.moshi)     // Moshi converter
-    implementation(libs.moshi.kotlin)       // Kotlin support for Moshi
+    implementation(libs.moshi.kotlin)       // Kotlin support for MoshiPSPKPS
     implementation(libs.okhttp.core)        // OkHttp
     implementation(libs.okhttp.logging)
+
+
+    //coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+   //coil
+    implementation(libs.coil.compose)
+   //splash screen
+    implementation(libs.core.splashscreen)
 }
 kapt {
     correctErrorTypes = true

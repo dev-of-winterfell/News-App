@@ -1,27 +1,97 @@
 package com.example.myapplication.ui.Screens
 
 
+import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.myapplication.ui.Component.Loader
+import com.example.myapplication.ui.Component.NewsList
+import com.example.myapplication.ui.Component.NewsRowComponent
+import com.example.myapplication.ui.Component.ShimmerNewsCardItem
 import com.example.myapplication.ui.ViewModels.NewsViewModel
+import com.example.utilities.ResourceState
 
-import java.lang.reflect.Modifier
 
-
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    //a variable named newsiewmodel of type viewmodel and initialized it with FlightView
-    newsViewModel: NewsViewModel= hiltViewModel()
-    //hilt has injected an instance of news view model into this composable
-
+    newsViewModel: NewsViewModel = hiltViewModel()
 ) {
-  Surface(modifier = androidx.compose.ui.Modifier.fillMaxSize()) {
+    val newsRes by newsViewModel.news.collectAsState()
 
-  }
+    val pagerState = rememberPagerState(initialPage = 0) { 100 }
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        VerticalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
+                .padding(top = 24.dp),
+
+            pageSpacing = 16.dp
+        ) { page ->
+            when (newsRes) {
+                is ResourceState.Loading -> {
+                    ShimmerNewsCardItem()
+                }
+                is ResourceState.Success -> {
+                    val response = (newsRes as ResourceState.Success).data
+                    if (response.articles.isNotEmpty()) {
+                        NewsRowComponent(page, response.articles[page % response.articles.size])
+                    }
+                }
+                is ResourceState.Error -> {
+                    ErrorComponent(
+                        message = (newsRes as ResourceState.Error).error.toString()
+                    )
+                }
+            }
+        }
+    }
 }
+
+@Composable
+fun ErrorComponent(message: String) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Error: $message",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.error
+        )
+    }
+}
+
+
+
+
+
+
+
 
 @Preview
 @Composable

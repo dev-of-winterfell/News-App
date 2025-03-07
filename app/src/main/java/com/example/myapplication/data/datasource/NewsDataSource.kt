@@ -7,8 +7,11 @@ import retrofit2.http.Query
 
 interface NewsDataSource {
     @GET("v2/top-headlines")
-    fun getNewsHeadlines(
+    suspend fun getNewsHeadlines(
         country: String,
 
     ): Response<NewsResponse>
 }
+//This is like a simplified version of the order pad
+//Notice it only asks for the country - it's hiding the complexity of the apiKey
+//It's an interface, meaning it just defines what we can do, not how to do it

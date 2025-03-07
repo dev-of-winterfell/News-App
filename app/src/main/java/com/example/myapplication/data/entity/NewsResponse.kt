@@ -2,23 +2,23 @@ package com.example.myapplication.data.entity
 
 data class NewsResponse(
     val status:String,
-    val totalResults:String,
+    val totalResults:Int,
     val articles:List<Article>
 
 )
 data class Article(
-    val author:String,
-    val title:String,
-    val description:String,
-    val url:String,
-    val urlToImage:String,
-    val publishedAt:String,
-    val content:String,
-    val source:Source
+    val author: String?,        // Made nullable
+    val title: String,         // Usually not null
+    val description: String?,   // Made nullable
+    val url: String,           // Usually not null
+    val urlToImage: String?,    // Made nullable
+    val publishedAt: String,    // Usually not null
+    val content: String?,       // Made nullable
+    val source: Source?
 
 )
 data class Source(
-    val id:String,
+    val id:String?,
     val name:String
 
 )
